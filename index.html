@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertitore Cheeseburger</title>
-
-    
+    <title>Cheeseburger Converter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -70,50 +68,95 @@
         #result span {
             font-size: 24px;
         }
+
+        #languageButton {
+            margin-top: 10px;
+            padding: 8px 20px;
+            background-color: #7300ff;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <h1>🍔🍔Convertitore Cheeseburgers🍔🍔</h1>
-        
+        <h1 id="title">🍔🍔Cheeseburger Converter🍔🍔</h1>
     </header>
-    <h3>
-        Hai mai voluto chiedere il pagamento dopo una commissione, ma quando arriva il momento di dire il prezzo ti senti in imbarazzo per la cifra esagerata e noiosa? Non preoccuparti più! Con il convertitore Euro-Cheeseburger non avrai più problemi a confondere i tuoi clienti al punto da non farti mai più contattare!
+    <button id="languageButton" onclick="toggleLanguage()">Switch to Italiano</button>
+    <h3 id="intro">
+        Have you ever wanted to ask for payment after a commission, but when it's time to state the price, you feel embarrassed about the exaggerated and boring amount? Worry no more! With the Euro-Cheeseburger converter, you'll never confuse your clients again to the point of never hearing from them!
     </h3>
     <main>
         <section>
-            <h2>Costo dei cheeseburgers</h2>
-            <p>Imposta il costo di ogni cheeseburger (default: 3.50€)</p>
+            <h2 id="costHeader">Cost of Cheeseburgers</h2>
+            <p id="setPriceLabel">Set the cost of each cheeseburger (default: 3.50€)</p>
             <input type="number" id="CostoCheeseburgers" placeholder="3.50€">
             <label for="CostoCheeseburgers">€</label>
         </section>
         <hr>
         <section>
-            <h2>Euro-cheeseburgers</h2>
-            <p>Metti il costo in euro per sapere a quanti cheeseburger equivale (con eventuale resto)</p>
+            <h2 id="euroHeader">Euro to Cheeseburgers</h2>
+            <p id="euroLabel">Enter the euro amount to see how many cheeseburgers it equals (with possible change)</p>
             <label for="euroInput">Euros:</label>
             <input type="number" id="euroInput" placeholder="e.g., 10" step="0.01">
             <div id="result"></div>
         </section>
         <hr>
         <section>
-            <h2>Cheeseburgers-Euro</h2>
-            <p>Metti il numero di cheeseburgers per sapere a quanti euro equivalgono (Metti anche il resto se lo hai)</p>
+            <h2 id="burgerHeader">Cheeseburgers to Euro</h2>
+            <p id="burgerLabel">Enter the number of cheeseburgers to know how much they cost in euros (Include any change)</p>
             <label for="burgerInput">Cheeseburgers:</label>
             <input type="number" id="burgerInput" placeholder="e.g., 4" step="0.01">
             <hr>
-            <label for="carryInput">Resto (facoltativo):</label>
+            <label for="carryInput">Change (optional):</label>
             <input type="number" id="carryInput" placeholder="e.g., 2.50" step="0.01">
             <label for="carryInput">€</label>
             <div id="euroResult"></div>
         </section>
-        <h6>Brought to you by Steph404</h6>
+        <h6 id="footerText">Brought to you by Steph404</h6>
     </main>
 
     <script>
+        let currentLanguage = 'it';
+
+        const langText = {
+            en: {
+                title: "🍔🍔Euro<->Cheeseburger Converter🍔🍔",
+                intro: "Have you ever wanted to ask for payment after a commission, but when it's time to state the price, you feel embarrassed about the exaggerated and boring amount? Worry no more! With the Euro-Cheeseburger converter, you'll never confuse your clients again to the point of never hearing from them!",
+                costHeader: "Cost of Cheeseburgers",
+                setPriceLabel: "Set the cost of each cheeseburger (Default: 3.50€)",
+                euroHeader: "Euro to Cheeseburgers",
+                euroLabel: "Enter the euro amount to see how many cheeseburgers it equals (with possible change)",
+                burgerHeader: "Cheeseburgers to Euro",
+                burgerLabel: "Enter the number of cheeseburgers to know how much they cost in euros (Include any change)",
+                languageButton: "Switch to Italiano",
+                footerText: "Brought to you by Steph404",
+                invalidEuro: "Invalid euro amount",
+                invalidBurgers: "Invalid number of cheeseburgers.",
+                euroToCheeseburgerMessage: "You can buy 🍔🍔🍔 (3 cheeseburgers) with €1.00 in change."
+            },
+            it: {
+                title: "🍔🍔Convertitore Euro<->Cheeseburger🍔🍔",
+                intro: "Hai mai voluto chiedere il pagamento dopo una commissione, ma quando arriva il momento di dire il prezzo ti senti in imbarazzo per la cifra esagerata e noiosa? Non preoccuparti più! Con il convertitore Euro-Cheeseburger non avrai più problemi a confondere i tuoi clienti al punto da non farti mai più contattare!",
+                costHeader: "Costo dei Cheeseburgers",
+                setPriceLabel: "Imposta il costo di ogni cheeseburger (Default: 3.50€)",
+                euroHeader: "Euro a Cheeseburgers",
+                euroLabel: "Inserisci l'importo in euro per sapere quanti cheeseburger puoi comprare (con eventuale resto)",
+                burgerHeader: "Cheeseburgers a Euro",
+                burgerLabel: "Inserisci il numero di cheeseburgers per sapere quanto costano in euro (includi anche il resto)",
+                languageButton: "Passa all'Inglese",
+                footerText: "Brought to you by Steph404",
+                invalidEuro: "Quantità di euro non valida",
+                invalidBurgers: "Numero di cheeseburgers non valido.",
+                euroToCheeseburgerMessage: "Puoi comprare 🍔🍔🍔 (3 cheeseburgers) con €1,00 di resto."
+            }
+        };
+
         function getCheeseburgerPrice() {
             const userPrice = parseFloat(document.getElementById('CostoCheeseburgers').value);
-            return isNaN(userPrice) || userPrice <= 0 ? 3.50 : userPrice; // Default a 3.50€
+            return isNaN(userPrice) || userPrice <= 0 ? 3.50 : userPrice;
         }
 
         function convertToCheeseburgers() {
@@ -121,43 +164,57 @@
             const resultDiv = document.getElementById('result');
             const cheeseburgerPrice = getCheeseburgerPrice();
             if (isNaN(euros) || euros <= 0) {
-                resultDiv.textContent = 'Quantità di euro non valida';
+                resultDiv.textContent = langText[currentLanguage].invalidEuro;
                 return;
             }
 
             const cheeseburgers = Math.floor(euros / cheeseburgerPrice);
             const carry = euros % cheeseburgerPrice;
 
-            resultDiv.innerHTML = `Puoi comprare <span>${'🍔'.repeat(cheeseburgers)}</span> (${cheeseburgers} cheeseburgers) con €${carry.toFixed(2)} di resto.`;
+            resultDiv.innerHTML = `${langText[currentLanguage].euroToCheeseburgerMessage} (${cheeseburgers} cheeseburgers) con €${carry.toFixed(2)} di resto.`;
         }
 
         function convertToEuros() {
             const burgers = parseInt(document.getElementById('burgerInput').value);
             let carry = parseFloat(document.getElementById('carryInput').value);
 
-            carry = isNaN(carry) || carry <= 0 ? 0 : carry; // Default a 0 se è invalido
+            carry = isNaN(carry) || carry <= 0 ? 0 : carry;
             const cheeseburgerPrice = getCheeseburgerPrice();
             const euroResultDiv = document.getElementById('euroResult');
 
-        if (isNaN(burgers) || burgers <= 0) {
-            euroResultDiv.textContent = 'Numero di cheeseburgers non valido.';
-            return;
+            if (isNaN(burgers) || burgers <= 0) {
+                euroResultDiv.textContent = langText[currentLanguage].invalidBurgers;
+                return;
+            }
+
+            const totalCost = (burgers * cheeseburgerPrice) + carry;
+
+            euroResultDiv.textContent = `Il costo totale per ${burgers} cheeseburgers con €${carry.toFixed(2)} di resto è €${totalCost.toFixed(2)}.`;
         }
 
-        const totalCost = (burgers * cheeseburgerPrice) + carry;
-
-            euroResultDiv.textContent = `il costo totale per ${burgers} cheeseburgers con €${carry.toFixed(2)} di resto è €${totalCost.toFixed(2)}.`;
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'it' : 'en';
+            updateTexts();
         }
 
-        
-        document.getElementById('CostoCheeseburgers').addEventListener('input', () => {
-            convertToCheeseburgers();
-            convertToEuros();
-        });
+        function updateTexts() {
+            const texts = langText[currentLanguage];
+            document.getElementById('title').textContent = texts.title;
+            document.getElementById('intro').textContent = texts.intro;
+            document.getElementById('costHeader').textContent = texts.costHeader;
+            document.getElementById('setPriceLabel').textContent = texts.setPriceLabel;
+            document.getElementById('euroHeader').textContent = texts.euroHeader;
+            document.getElementById('euroLabel').textContent = texts.euroLabel;
+            document.getElementById('burgerHeader').textContent = texts.burgerHeader;
+            document.getElementById('burgerLabel').textContent = texts.burgerLabel;
+            document.getElementById('footerText').textContent = texts.footerText;
+            document.getElementById('languageButton').textContent = texts.languageButton;
+        }
 
         document.getElementById('euroInput').addEventListener('input', convertToCheeseburgers);
         document.getElementById('burgerInput').addEventListener('input', convertToEuros);
         document.getElementById('carryInput').addEventListener('input', convertToEuros);
+        updateTexts();
     </script>
 </body>
 </html>
