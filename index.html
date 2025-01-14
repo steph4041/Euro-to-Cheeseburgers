@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convertitore Cheeseburger</title>
+
     
     <style>
         body {
@@ -74,6 +75,7 @@
 <body>
     <header>
         <h1>🍔🍔Convertitore Cheeseburgers🍔🍔</h1>
+        
     </header>
     <h3>
         Hai mai voluto chiedere il pagamento dopo una commissione, ma quando arriva il momento di dire il prezzo ti senti in imbarazzo per la cifra esagerata e noiosa? Non preoccuparti più! Con il convertitore Euro-Cheeseburger non avrai più problemi a confondere i tuoi clienti al punto da non farti mai più contattare!
@@ -105,6 +107,7 @@
             <label for="carryInput">€</label>
             <div id="euroResult"></div>
         </section>
+        <h6>Brought to you by Steph404</h6>
     </main>
 
     <script>
@@ -146,7 +149,7 @@
             euroResultDiv.textContent = `il costo totale per ${burgers} cheeseburgers con €${carry.toFixed(2)} di resto è €${totalCost.toFixed(2)}.`;
         }
 
-
+        
         document.getElementById('CostoCheeseburgers').addEventListener('input', () => {
             convertToCheeseburgers();
             convertToEuros();
