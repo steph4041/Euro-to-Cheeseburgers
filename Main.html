@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertitore Cheeseburger</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #292929;
+        }
+
+        header {
+            background-color: #7300ff;
+            padding: 20px;
+            color: #fff;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        main {
+            margin: 10px auto;
+            width: 90%;
+            max-width: 600px;
+            background: #5100b3;
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        h3 {
+            margin: 40px auto;
+            width: 90%;
+            max-width: 800px;
+            color: #fff;
+            background: #ffffff20;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #d400ff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        #result span {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🍔🍔Convertitore Cheeseburgers🍔🍔</h1>
+    </header>
+    <h3>
+        Hai mai voluto chiedere il pagamento dopo una commissione, ma quando arriva il momento di dire il prezzo ti senti in imbarazzo per la cifra esagerata e noiosa? Non preoccuparti più! Con il convertitore Euro-Cheeseburger non avrai più problemi a confondere i tuoi clienti al punto da non farti mai più contattare!
+    </h3>
+    <main>
+        <section>
+            <h2>Costo dei cheeseburgers</h2>
+            <p>Imposta il costo di ogni cheeseburger (default: 3.50€)</p>
+            <input type="number" id="CostoCheeseburgers" placeholder="3.50€">
+            <label for="CostoCheeseburgers">€</label>
+        </section>
+        <hr>
+        <section>
+            <h2>Euro-cheeseburgers</h2>
+            <p>Metti il costo in euro per sapere a quanti cheeseburger equivale (con eventuale resto)</p>
+            <label for="euroInput">Euros:</label>
+            <input type="number" id="euroInput" placeholder="e.g., 10" step="0.01">
+            <div id="result"></div>
+        </section>
+        <hr>
+        <section>
+            <h2>Cheeseburgers-Euro</h2>
+            <p>Metti il numero di cheeseburgers per sapere a quanti euro equivalgono (Metti anche il resto se lo hai)</p>
+            <label for="burgerInput">Cheeseburgers:</label>
+            <input type="number" id="burgerInput" placeholder="e.g., 4" step="0.01">
+            <hr>
+            <label for="carryInput">Resto (facoltativo):</label>
+            <input type="number" id="carryInput" placeholder="e.g., 2.50" step="0.01">
+            <label for="carryInput">€</label>
+            <div id="euroResult"></div>
+        </section>
+    </main>
+
+    <script>
+        function getCheeseburgerPrice() {
+            const userPrice = parseFloat(document.getElementById('CostoCheeseburgers').value);
+            return isNaN(userPrice) || userPrice <= 0 ? 3.50 : userPrice; // Default a 3.50€
+        }
+
+        function convertToCheeseburgers() {
+            const euros = parseFloat(document.getElementById('euroInput').value);
+            const resultDiv = document.getElementById('result');
+            const cheeseburgerPrice = getCheeseburgerPrice();
+            if (isNaN(euros) || euros <= 0) {
+                resultDiv.textContent = 'Quantità di euro non valida';
+                return;
+            }
+
+            const cheeseburgers = Math.floor(euros / cheeseburgerPrice);
+            const carry = euros % cheeseburgerPrice;
+
+            resultDiv.innerHTML = `Puoi comprare <span>${'🍔'.repeat(cheeseburgers)}</span> (${cheeseburgers} cheeseburgers) con €${carry.toFixed(2)} di resto.`;
+        }
+
+        function convertToEuros() {
+            const burgers = parseInt(document.getElementById('burgerInput').value);
+            let carry = parseFloat(document.getElementById('carryInput').value);
+
+            carry = isNaN(carry) || carry <= 0 ? 0 : carry; // Default a 0 se è invalido
+            const cheeseburgerPrice = getCheeseburgerPrice();
+            const euroResultDiv = document.getElementById('euroResult');
+
+        if (isNaN(burgers) || burgers <= 0) {
+            euroResultDiv.textContent = 'Numero di cheeseburgers non valido.';
+            return;
+        }
+
+        const totalCost = (burgers * cheeseburgerPrice) + carry;
+
+            euroResultDiv.textContent = `il costo totale per ${burgers} cheeseburgers con €${carry.toFixed(2)} di resto è €${totalCost.toFixed(2)}.`;
+        }
+
+
+        document.getElementById('CostoCheeseburgers').addEventListener('input', () => {
+            convertToCheeseburgers();
+            convertToEuros();
+        });
+
+        document.getElementById('euroInput').addEventListener('input', convertToCheeseburgers);
+        document.getElementById('burgerInput').addEventListener('input', convertToEuros);
+        document.getElementById('carryInput').addEventListener('input', convertToEuros);
+    </script>
+</body>
+</html>
