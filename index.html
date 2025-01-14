@@ -53,7 +53,7 @@
         }
 
         button {
-            background-color: #d400ff;
+            background-color: #003f66;
             color: #fff;
             border: none;
             cursor: pointer;
@@ -94,6 +94,7 @@
             <p id="setPriceLabel">Set the cost of each cheeseburger (default: 3.50€)</p>
             <input type="number" id="CostoCheeseburgers" placeholder="3.50€">
             <label for="CostoCheeseburgers">€</label>
+            <button onclick="convertToCheeseburgers()">🔁</button>
         </section>
         <hr>
         <section>
@@ -135,7 +136,7 @@
                 footerText: "Brought to you by Steph404",
                 invalidEuro: "Invalid euro amount",
                 invalidBurgers: "Invalid number of cheeseburgers.",
-                euroToCheeseburgerMessage: "You can buy 🍔🍔🍔 (3 cheeseburgers) with €1.00 in change."
+                euroToCheeseburgerMessage: "You can buy"
             },
             it: {
                 title: "🍔🍔Convertitore Euro<->Cheeseburger🍔🍔",
@@ -150,7 +151,7 @@
                 footerText: "Brought to you by Steph404",
                 invalidEuro: "Quantità di euro non valida",
                 invalidBurgers: "Numero di cheeseburgers non valido.",
-                euroToCheeseburgerMessage: "Puoi comprare 🍔🍔🍔 (3 cheeseburgers) con €1,00 di resto."
+                euroToCheeseburgerMessage: "Puoi comprare"
             }
         };
 
@@ -171,8 +172,8 @@
             const cheeseburgers = Math.floor(euros / cheeseburgerPrice);
             const carry = euros % cheeseburgerPrice;
 
-            resultDiv.innerHTML = `${langText[currentLanguage].euroToCheeseburgerMessage} (${cheeseburgers} cheeseburgers) con €${carry.toFixed(2)} di resto.`;
-        }
+            resultDiv.innerHTML = `${langText[currentLanguage].euroToCheeseburgerMessage} <span>${'🍔'.repeat(cheeseburgers)}</span> (${cheeseburgers} cheeseburgers) + €${carry.toFixed(2)}`;
+            }
 
         function convertToEuros() {
             const burgers = parseInt(document.getElementById('burgerInput').value);
@@ -189,7 +190,7 @@
 
             const totalCost = (burgers * cheeseburgerPrice) + carry;
 
-            euroResultDiv.textContent = `Il costo totale per ${burgers} cheeseburgers con €${carry.toFixed(2)} di resto è €${totalCost.toFixed(2)}.`;
+            euroResultDiv.textContent = `${burgers} cheeseburgers + €${carry.toFixed(2)} ===> €${totalCost.toFixed(2)}.`;
         }
 
         function toggleLanguage() {
